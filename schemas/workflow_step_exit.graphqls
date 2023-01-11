@@ -1,0 +1,58 @@
+"""
+ExitStep implements BaseStep with EXIT step type configuration
+"""
+type ExitStep implements BaseStep {
+    "id of the step"
+    id: ID!
+
+    "type of the step"
+    type: StepType!
+
+    "config is the configuration data of the EXIT step type"
+    config: ExitStepConfig!
+
+    "parentSteps contains list of parent steps"
+    parentSteps: [ParentStepRelation!]!
+
+    "childSteps contains the list of child steps"
+    childSteps: [ChildStepRelation!]!
+
+    "exitOnError indicates of the workflow should be exited if the current step is failed"
+    exitOnError: Boolean!
+
+    "metadata contains any data with any type"
+    metadata: Map
+}
+
+type ExitStepConfig {
+    "notes contains exit step notes"
+    notes: String
+}
+
+"""
+ExitStepInput is the input representation of ExitStep
+"""
+input ExitStepInput {
+    "id of the step"
+    id: ID!
+
+    "config is the configuration data of the EXIT step type"
+    config: ExitStepConfigInput!
+
+    "parentSteps contains list of parent steps"
+    parentSteps: [ParentStepRelationInput!]!
+
+    "childSteps contains the list of child steps"
+    childSteps: [ChildStepRelationInput!]!
+
+    "exitOnError indicates of the workflow should be exited if the current step is failed"
+    exitOnError: Boolean!
+
+    "metadata contains any data with any type"
+    metadata: Map
+}
+
+input ExitStepConfigInput {
+    "notes contains exit step notes"
+    notes: String
+}

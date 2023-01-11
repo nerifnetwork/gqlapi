@@ -1,0 +1,29 @@
+"""
+WorkflowState contains all available workflow states
+"""
+enum WorkflowExecutionStatus {
+    IN_PROGRESS
+    SUCCESS
+    FAIL
+}
+
+"""
+WorkflowExecutionMeta represents the workflow execution metadata
+"""
+type WorkflowExecutionMeta {
+    Error: String!
+    Duration: Int!
+    Store: Map!
+}
+
+"""
+WorkflowExecution represents the high level workflow execution model
+"""
+type WorkflowExecution {
+    id: ID!
+    workflowID: ID!
+    status: WorkflowExecutionStatus!
+    metadata: WorkflowExecutionMeta!
+    createdAt: Time!
+    updatedAt: Time!
+}

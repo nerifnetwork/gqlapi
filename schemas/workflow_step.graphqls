@@ -1,0 +1,102 @@
+"""
+StepType contains all available step types
+"""
+enum StepType {
+    TRIGGER
+    ACTION
+    CONDITION
+    EXIT
+}
+
+"""
+ParentStepRelation is the step info about a parent step
+"""
+type ParentStepRelation {
+    "id is the step identifier"
+    id: ID!
+
+    "executeOnError indicates if the step with the given ID must be executed if parent step is failed"
+    executeOnError: Boolean!
+}
+
+"""
+ChildStepRelation is the step info about a child step
+"""
+type ChildStepRelation {
+    "id is the step identifier"
+    id: ID!
+
+    "executeOnError indicates if the step with the given ID must be executed if parent step is failed"
+    executeOnError: Boolean!
+
+    "conditions is the list of conditions to be met in order to execute child step"
+    conditions: [Condition!]
+}
+
+"""
+ParentStepRelationInput is the input representation of ParentStepRelation
+"""
+input ParentStepRelationInput {
+    "id is the step identifier"
+    id: ID!
+
+    "executeOnError indicates if the step with the given ID must be executed if parent step is failed"
+    executeOnError: Boolean!
+}
+
+"""
+ChildStepRelationInput is the input representation of ChildStepRelation
+"""
+input ChildStepRelationInput {
+    "id is the step identifier"
+    id: ID!
+
+    "executeOnError indicates if the step with the given ID must be executed if parent step is failed"
+    executeOnError: Boolean!
+
+    "conditions is the list of conditions to be met in order to execute child step"
+    conditions: [ConditionPureInput!]
+}
+
+"""
+BaseStep represents the base step model
+"""
+interface BaseStep {
+    "id of the step"
+    id: ID!
+
+    "type of the step"
+    type: StepType!
+
+    "parentSteps contains list of parent steps"
+    parentSteps: [ParentStepRelation!]!
+
+    "childSteps contains the list of child steps"
+    childSteps: [ChildStepRelation!]!
+
+    "exitOnError indicates of the workflow should be exited if the current step is failed"
+    exitOnError: Boolean!
+
+    "metadata contains any data with any type"
+    metadata: Map
+}
+
+"""
+Step is the union of all possible steps
+"""
+union Step = TriggerStep |
+    ActionStep |
+    ConditionStep |
+    ExitStep
+
+"""
+StepInput is the union of all possible step inputs.
+"""
+input StepInput{
+    type: StepType!
+
+    triggerStep: TriggerStepInput
+    actionStep: ActionStepInput
+    conditionStep: ConditionStepInput
+    exitStep: ExitStepInput
+}

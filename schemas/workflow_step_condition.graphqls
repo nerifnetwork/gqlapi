@@ -1,0 +1,135 @@
+"""
+ConditionOperator represents logical operators
+"""
+enum ConditionOperator {
+    AND
+    OR
+    XOR
+}
+
+"""
+Condition contains condition configiration.
+E.g. 1 (left) == (condition) 1 (right).
+"""
+type ConditionPure {
+    "left is the left side of the condition"
+    left: Any!
+
+    "operator is basically condition operator"
+    operator: String!
+
+    "right is the right side of the condition"
+    right: Any!
+}
+
+"""
+ConditionGroup contains condition group configiration.
+"""
+type ConditionGroup {
+    "conditionOperator is basically condition operator"
+    conditionOperator: ConditionOperator!
+
+    "conditions is the list of conditions"
+    conditions: [Condition]!
+}
+
+"""
+Condition is the common condition definition
+"""
+union Condition = ConditionPure | ConditionGroup
+
+"""
+ConditionPureInput is the input representation of StepCondition
+"""
+input ConditionPureInput {
+    "left is the left side of the condition"
+    left: Any!
+
+    "operator is basically condition operator"
+    operator: String!
+
+    "right is the right side of the condition"
+    right: Any!
+}
+
+"""
+ConditionGroupInput is the input representation of ConditionGroup.
+"""
+input ConditionGroupInput {
+    "conditionOperator is basically condition operator"
+    conditionOperator: ConditionOperator!
+
+    "pureConditions is the list of pure conditions"
+    pureConditions: [ConditionPureInput!]!
+
+    "groupConditions is the list of group conditions"
+    groupConditions: [ConditionGroupInput!]!
+}
+
+"""
+ConditionStep implements BaseStep with CONDITION step type configuration
+"""
+type ConditionStep implements BaseStep {
+    "id of the step"
+    id: ID!
+
+    "type of the step"
+    type: StepType!
+
+    "config is the configuration data of the CONDITION step type"
+    config: ConditionStepConfig!
+
+    "parentSteps contains list of parent steps"
+    parentSteps: [ParentStepRelation!]!
+
+    "childSteps contains the list of child steps"
+    childSteps: [ChildStepRelation!]!
+
+    "exitOnError indicates of the workflow should be exited if the current step is failed"
+    exitOnError: Boolean!
+
+    "metadata contains any data with any type"
+    metadata: Map
+}
+
+type ConditionStepConfig {
+    "outputField contains the name of the output field"
+    outputField: String!
+
+    "condition contains a conditions"
+    condition: Condition!
+}
+
+"""
+ConditionStepInput is the input representation of ConditionStep
+"""
+input ConditionStepInput {
+    "id of the step"
+    id: ID!
+
+    "config is the configuration data of the CONDITION step type"
+    config: ConditionStepConfigInput!
+
+    "parentSteps contains list of parent steps"
+    parentSteps: [ParentStepRelationInput!]!
+
+    "childSteps contains the list of child steps"
+    childSteps: [ChildStepRelationInput!]!
+
+    "exitOnError indicates of the workflow should be exited if the current step is failed"
+    exitOnError: Boolean!
+
+    "metadata contains any data with any type"
+    metadata: Map
+}
+
+input ConditionStepConfigInput {
+    "outputField contains the name of the output field"
+    outputField: String!
+
+    "pureCondition contains a pure condition"
+    pureCondition: ConditionPureInput
+
+    "groupCondition a conditions group"
+    groupCondition: ConditionGroupInput
+}

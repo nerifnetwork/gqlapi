@@ -1,0 +1,119 @@
+"""
+StepTriggerKind contains all kinds of triggers
+"""
+enum StepTriggerKind {
+    BLOCK
+    EVENT
+    CRON
+}
+
+"""
+TriggerStep implements BaseStep with TRIGGER step type configuration
+"""
+type TriggerStep implements BaseStep {
+    "id of the step"
+    id: ID!
+
+    "type of the step"
+    type: StepType!
+
+    "config is the configuration data of the TRIGGER step type"
+    config: TriggerStepConfig!
+
+    "parentSteps contains list of parent steps"
+    parentSteps: [ParentStepRelation!]!
+
+    "childSteps contains the list of child steps"
+    childSteps: [ChildStepRelation!]!
+
+    "exitOnError indicates of the workflow should be exited if the current step is failed"
+    exitOnError: Boolean!
+
+    "metadata contains any data with any type"
+    metadata: Map
+}
+
+type BlockTriggerConfigParams {
+    chainID: Int!
+    period: String!
+}
+
+type EventTriggerConfigParams {
+    chainID: Int!
+    contract: String!
+    eventABI: String
+    topicID: String
+}
+
+type CronTriggerConfigParams {
+    rule: String!
+}
+
+union TriggerConfigParams = BlockTriggerConfigParams | EventTriggerConfigParams | CronTriggerConfigParams
+
+type TriggerStepConfig {
+    "trigger is the kind of trigger"
+    trigger: StepTriggerKind!
+
+    "outputField is the variable name"
+    outputField: String!
+
+    "params contains trigger parameters"
+    params: TriggerConfigParams!
+}
+
+"""
+TriggerStepInput is the input representation of TriggerStep
+"""
+input TriggerStepInput {
+    "id of the step"
+    id: ID!
+
+    "config is the configuration data of the TRIGGER step type"
+    config: TriggerStepConfigInput!
+
+    "parentSteps contains list of parent steps"
+    parentSteps: [ParentStepRelationInput!]!
+
+    "childSteps contains the list of child steps"
+    childSteps: [ChildStepRelationInput!]!
+
+    "exitOnError indicates of the workflow should be exited if the current step is failed"
+    exitOnError: Boolean!
+
+    "metadata contains any data with any type"
+    metadata: Map
+}
+
+input BlockTriggerConfigParamsInput {
+    chainID: Int!
+    period: String!
+}
+
+input EventTriggerConfigParamsInput {
+    chainID: Int!
+    contract: String!
+    eventABI: String
+    topicID: String
+}
+
+input CronTriggerConfigParamsInput {
+    rule: String!
+}
+
+input TriggerStepConfigInput {
+    "trigger is the kind of trigger"
+    trigger: StepTriggerKind!
+
+    "outputField is the variable name"
+    outputField: String!
+
+    "blockParams contains block trigger parameters"
+    blockParams: BlockTriggerConfigParamsInput
+
+    "eventParams contains event trigger parameters"
+    eventParams: EventTriggerConfigParamsInput
+
+    "cronParams contains cron trigger parameters"
+    cronParams: CronTriggerConfigParamsInput
+}

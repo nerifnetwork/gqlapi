@@ -1,0 +1,134 @@
+"""
+StepTriggerKind contains all kinds of actions
+"""
+enum StepActionKind {
+    ETH_CALL
+    ETH_TX
+    HTTP
+}
+
+"""
+ActionStep implements BaseStep with ACTION step type configuration
+"""
+type ActionStep implements BaseStep {
+    "id of the step"
+    id: ID!
+
+    "type of the step"
+    type: StepType!
+
+    "config is the configuration data of the ACTION step type"
+    config: ActionStepConfig!
+
+    "parentSteps contains list of parent steps"
+    parentSteps: [ParentStepRelation!]!
+
+    "childSteps contains the list of child steps"
+    childSteps: [ChildStepRelation!]!
+
+    "exitOnError indicates of the workflow should be exited if the current step is failed"
+    exitOnError: Boolean!
+
+    "metadata contains any data with any type"
+    metadata: Map
+}
+
+type EthCallActionConfigParams {
+    chainID: Int!
+    contract: String!
+    funcABI: String!
+    params: Map!
+    gasLimit: Int!
+}
+
+type EthTxActionConfigParams {
+    chainID: Int!
+    contract: String!
+    funcABI: String!
+    params: Map!
+    gasLimit: Int!
+}
+
+type HTTPRequestActionConfigParams {
+    method: String!
+    address: String!
+    timeout: Int!
+}
+
+union ActionConfigParams = EthCallActionConfigParams |
+    EthTxActionConfigParams |
+    HTTPRequestActionConfigParams
+
+type ActionStepConfig {
+    "action is the kind of action"
+    action: StepActionKind!
+
+    "outputField contains the name of the output field"
+    outputField: String!
+
+    "params contains action parameters"
+    params: ActionConfigParams!
+}
+
+"""
+ActionStepInput is the input representation of ActionStep
+"""
+input ActionStepInput {
+    "id of the step"
+    id: ID!
+
+    "config is the configuration data of the ACTION step type"
+    config: ActionStepConfigInput!
+
+    "parentSteps contains list of parent steps"
+    parentSteps: [ParentStepRelationInput!]!
+
+    "childSteps contains the list of child steps"
+    childSteps: [ChildStepRelationInput!]!
+
+    "exitOnError indicates of the workflow should be exited if the current step is failed"
+    exitOnError: Boolean!
+
+    "metadata contains any data with any type"
+    metadata: Map
+}
+
+input EthCallActionConfigParamsInput {
+    chainID: Int!
+    contract: String!
+    funcABI: String!
+    params: Map!
+    gasLimit: Int!
+}
+
+input EthTxActionConfigParamsInput {
+    chainID: Int!
+    contract: String!
+    funcABI: String!
+    params: Map!
+    gasLimit: Int!
+}
+
+input HTTPRequestActionConfigParamsInput {
+    method: String!
+    address: String!
+    timeout: Int!
+}
+
+
+input ActionStepConfigInput {
+    "action is the kind of action"
+    action: StepActionKind!
+
+    "outputField contains the name of the output field"
+    outputField: String!
+
+    "ethCallParams contains eth_call action parameters"
+    ethCallParams: EthCallActionConfigParamsInput
+
+    "ethTxParams contains eth_tx action parameters"
+    ethTxParams: EthTxActionConfigParamsInput
+
+    "httpRequestParams contains HTTP request action parameters"
+    httpRequestParams: HTTPRequestActionConfigParamsInput
+}

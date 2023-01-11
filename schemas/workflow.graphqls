@@ -1,0 +1,34 @@
+"""
+WorkflowState contains all available workflow states
+"""
+enum WorkflowState {
+    DRAFT
+    ACTIVE
+    PAUSED
+    CANCELED
+}
+
+"""
+Workflow represents the high level workflow model
+"""
+type Workflow {
+    id: ID!
+    name: String!
+    description: String!
+    steps: [Step!]!
+    metadata: Map
+    state: WorkflowState!
+    owner: String!
+    createdAt: Time!
+    updatedAt: Time!
+}
+
+"""
+WorkflowInput is the input used to create or update a workflow
+"""
+input WorkflowInput {
+    name: String!
+    description: String!
+    steps: [StepInput!]!
+    metadata: Map
+}
